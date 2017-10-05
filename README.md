@@ -1,4 +1,4 @@
-# 2FA
+# 2FA<img src="https://github.com/Muqsit/2FA/blob/master/resources/GoogleAuthenticator.png" width="60" height="60" align="right"></img>
 Secure your server with Two-step verification.
 
 ## Installing
