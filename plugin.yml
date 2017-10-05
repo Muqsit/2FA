@@ -1,0 +1,14 @@
+name: 2FA
+main: muqsit\tfa\TFA
+api: 3.0.0-ALPHA9
+version: 0.0.1
+author: Muqsit
+description: Two-factor authentication for your PocketMine server.
+website: https://github.com/Muqsit
+commands:
+  2fa:
+    description: "2fa toggle command"
+    permission: 2fa
+permissions:
+  2fa:
+    default: true

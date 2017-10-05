@@ -1,0 +1,22 @@
+---
+# This is where 2FA will save 2FA secrets and recovery codes.
+Database:
+  # Database Type. Should be "JSON", "YAML" or "MySQL"
+  DataType: YAML
+  # Folder path ("/yourserverpath/{FolderPath}"). This is where the
+  # secrets and recovery codes will be saved.
+  FolderPath: 2fadata
+  # Optional. Only required if DataType is set to "MySQL"
+  Credentials:
+    Host: play.onmyserver.com
+    Username: dontuserootasusername
+    Password: abcd123
+    Database: tfa
+    Port: 3306
+
+# Whether to cancel rotation while the player is not authenticated.
+CancelRotation: false
+
+# This will be carved on the 2FA Barcode Map.
+2FATitle: PMMP
+...
