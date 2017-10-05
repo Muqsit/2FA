@@ -29,3 +29,6 @@ apt-get install libpng-dev
 - You have two options. Either manually 'Enter a provided key' or 'Scan a barcode'. If you want to enter a provided key, enter the 'Secret Key'. If you want to scan a barcode, scan the barcode given to you on the map.
 - Once done, you'll find a slot on your Google Authenticator App. It will print out a random 6 digit number and refresh it every 30 seconds or so. The random 6 digit number is your 2FA code. Execute _/2fa [6-digit-code]_.
 - Congratulations! You have set up 2FA! Now everytime you join the server, you'll have to type the 6-digit 2FA code that keeps on changing from time to time on your 2FA app. You can remove 2FA by executing /2fa remove or by entering the recovery codes that were provided to you on successfully linking your 2FA device.
+
+## Live test
+Join `play.cosmicpe.me:19132` to live-test this a very slightly-modified version of this plugin.
