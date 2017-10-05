@@ -1,0 +1,8 @@
+--- # Poggit-CI Manifest. Open the CI at https://poggit.pmmp.io/ci/Muqsit/2FA
+branches:
+- master
+projects:
+  2FA:
+    path: ""
+    icon: resources/GoogleAuthenticator.png
+...
