@@ -41,6 +41,12 @@ class TFA extends PluginBase{
 
 	public function onEnable(){
 		try{
+			if(!$this->getServer()->requiresAuthentication()){
+				$this->getServer()->getLogger()->warning("2FA requires 'xbox-auth' to be enabled in server.properties. Disabling 2FA...");
+				$this->getServer()->getPluginManager()->disablePlugin($this);
+				return;
+			}
+
 			if(!extension_loaded("gd")){
 				throw new \Error("Unable to find the 'GD' extension.");
 			}
@@ -66,18 +72,17 @@ class TFA extends PluginBase{
 			new TFAListener($this);
 		}catch(\Exception $e){
 			throw $e;
-		}finally{
-			foreach([
-				" ____  _____ _",
-				"|___ \|  ___/ \\",
-				"  __) | |_ / _ \\",
-				" / __/|  _/ ___ \\",
-				"|_____|_|/_/   \_\\",
-				" ",
-				"2FA has been successfully enabled."
-			] as $log){
-				$this->getServer()->getLogger()->notice($log);
-			}
+		}
+		foreach([
+			" ____  _____ _",
+			"|___ \|  ___/ \\",
+			"  __) | |_ / _ \\",
+			" / __/|  _/ ___ \\",
+			"|_____|_|/_/   \_\\",
+			" ",
+			"2FA has been successfully enabled."
+		] as $log){
+			$this->getServer()->getLogger()->notice($log);
 		}
 	}
 
