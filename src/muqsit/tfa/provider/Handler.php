@@ -187,7 +187,7 @@ class Handler{
 	 * Please read EXTENDEDLICENSE.md before making
 	 * any changes to this function.
 	 *
-	 * @return string
+	 * @return bool
 	 */
 	public function verifyCode(string $secret, string $code, int $discrepancy = 1, float $currentTimeSlice = null) : bool{
 		if($currentTimeSlice === null){
@@ -212,7 +212,7 @@ class Handler{
 	 * Please read EXTENDEDLICENSE.md before making
 	 * any changes to this function.
 	 *
-	 * @return string
+	 * @return string|bool
 	 */
 	private function _base32Decode(string $secret){
 		if(empty($secret)){
@@ -257,7 +257,7 @@ class Handler{
 	 * Please read EXTENDEDLICENSE.md before making
 	 * any changes to this function.
 	 *
-	 * @return string
+	 * @return bool
 	 */
 	private function timingSafeEquals(string $safeString, string $userString) : bool{
 		if(function_exists('hash_equals')){
