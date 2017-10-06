@@ -27,7 +27,7 @@ class Handler{
 
 	const ITEM_HOTBAR_SLOT = 3;
 
-    const CODE_LENGTH = 6;
+	const CODE_LENGTH = 6;
 
 	const BASE32_LOOKUP_TABLE = [
 		'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', //  7
@@ -121,12 +121,12 @@ class Handler{
 		$player->getServer()->getScheduler()->scheduleAsyncTask(new TFACheckTask($player));
 	}
 
-    /**
-     * Please read EXTENDEDLICENSE.md before making
-     * any changes to this function.
-     *
-     * @return string
-     */
+	/**
+	 * Please read EXTENDEDLICENSE.md before making
+	 * any changes to this function.
+	 *
+	 * @return string
+	 */
 	public function createSecret(int $secretLength = 16) : string{
 		$validChars = self::BASE32_LOOKUP_TABLE;
 
@@ -137,9 +137,9 @@ class Handler{
 		$rnd = false;
 		if(function_exists('random_bytes')){
 			$rnd = random_bytes($secretLength);
-		}elseif (function_exists('mcrypt_create_iv')){
+		}elseif(function_exists('mcrypt_create_iv')){
 			$rnd = mcrypt_create_iv($secretLength, MCRYPT_DEV_URANDOM);
-		}elseif (function_exists('openssl_random_pseudo_bytes')){
+		}elseif(function_exists('openssl_random_pseudo_bytes')){
 			$rnd = openssl_random_pseudo_bytes($secretLength, $cryptoStrong);
 			if (!$cryptoStrong) {
 				$rnd = false;
@@ -156,12 +156,12 @@ class Handler{
 		return $secret;
 	}
 
-    /**
-     * Please read EXTENDEDLICENSE.md before making
-     * any changes to this function.
-     *
-     * @return string
-     */
+	/**
+	 * Please read EXTENDEDLICENSE.md before making
+	 * any changes to this function.
+	 *
+	 * @return string
+	 */
 	public function getCode(string $secret, float $timeSlice = null) : string{
 		if($timeSlice === null){
 			$timeSlice = floor(time() / 30);
@@ -183,12 +183,12 @@ class Handler{
 		return str_pad($value % $modulo, self::CODE_LENGTH, '0', STR_PAD_LEFT);
 	}
 
-    /**
-     * Please read EXTENDEDLICENSE.md before making
-     * any changes to this function.
-     *
-     * @return bool
-     */
+	/**
+	 * Please read EXTENDEDLICENSE.md before making
+	 * any changes to this function.
+	 *
+	 * @return string
+	 */
 	public function verifyCode(string $secret, string $code, int $discrepancy = 1, float $currentTimeSlice = null) : bool{
 		if($currentTimeSlice === null){
 			$currentTimeSlice = floor(time() / 30);
@@ -208,12 +208,12 @@ class Handler{
 		return false;
 	}
 
-    /**
-     * Please read EXTENDEDLICENSE.md before making
-     * any changes to this function.
-     *
-     * @return string|bool
-     */
+	/**
+	 * Please read EXTENDEDLICENSE.md before making
+	 * any changes to this function.
+	 *
+	 * @return string
+	 */
 	private function _base32Decode(string $secret){
 		if(empty($secret)){
 			return "";
@@ -253,12 +253,12 @@ class Handler{
 		return $binaryString;
 	}
 
-    /**
-     * Please read EXTENDEDLICENSE.md before making
-     * any changes to this function.
-     *
-     * @return bool
-     */
+	/**
+	 * Please read EXTENDEDLICENSE.md before making
+	 * any changes to this function.
+	 *
+	 * @return string
+	 */
 	private function timingSafeEquals(string $safeString, string $userString) : bool{
 		if(function_exists('hash_equals')){
 			return hash_equals($safeString, $userString);

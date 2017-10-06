@@ -149,11 +149,10 @@ class TFA extends PluginBase{
 						$this->getProvider()->getHandler()->onVerify($player);
 						return true;
 					}
-
-           	        $issuer->sendMessage(implode("\n", [
-       	                TextFormat::RED."You have not configured your 2fa authenticator!",
-   	                    TextFormat::GRAY."Use ".TF::UNDERLINE."/2fa".TextFormat::RESET.TextFormat::GRAY." to enable it!"
-                    ]));
+					$issuer->sendMessage(implode("\n", [
+						TextFormat::RED."You have not configured your 2fa authenticator!",
+						TextFormat::GRAY."Use ".TF::UNDERLINE."/2fa".TextFormat::RESET.TextFormat::GRAY." to enable it!"
+					]));
 					return false;
 			}
 		}

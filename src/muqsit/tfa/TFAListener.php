@@ -86,7 +86,7 @@ class TFAListener implements Listener{
 		}
 	}
 
-    public function onPlayerCommandPreprocess(PlayerCommandPreprocessEvent $event){
+	public function onPlayerCommandPreprocess(PlayerCommandPreprocessEvent $event){
 		$player = $event->getPlayer();
 		$tfaplayer = $this->plugin->getTFAPlayer($player);
 		if($tfaplayer->isLocked()){

@@ -94,7 +94,7 @@ class RequestTFATask extends AsyncTask {
 	private function getURL(?string $title = null) : string{
 		$urlencoded = urlencode("otpauth://totp/".$this->player->getName()."?secret=".$this->secret);
 
-		if ($title !== null) {
+		if($title !== null){
 			$urlencoded .= urlencode("&issuer=".urlencode($title));
 		}
 
@@ -173,9 +173,9 @@ class RequestTFATask extends AsyncTask {
 
 				$player->dataPacket($pk);
 				$player->sendMessage(implode("\n", [
-		            TextFormat::GREEN."We have sent you a map with your secret info.".TextFormat::RESET,
-        		    TextFormat::GREEN."Enter (or scan) it into your authenticator",
-		            TextFormat::GREEN."application and then run ".TextFormat::GRAY."/2fa <code>"
+					TextFormat::GREEN."We have sent you a map with your secret info.".TextFormat::RESET,
+					TextFormat::GREEN."Enter (or scan) it into your authenticator",
+					TextFormat::GREEN."application and then run ".TextFormat::GRAY."/2fa <code>"
 				]));
 				$this->sendItem($player);
 			}
