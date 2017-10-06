@@ -28,6 +28,7 @@ class Handler{
 	const ITEM_HOTBAR_SLOT = 3;
 
 	const CODE_LENGTH = 6;
+	const SECRET_LENGTH = 16;
 
 	const BASE32_LOOKUP_TABLE = [
 		'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', //  7
@@ -127,30 +128,12 @@ class Handler{
 	 *
 	 * @return string
 	 */
-	public function createSecret(int $secretLength = 16) : string{
-		$validChars = self::BASE32_LOOKUP_TABLE;
-
-		if($secretLength < 16 || $secretLength > 128){
-			throw new \Exception('Bad secret length');
-		}
+	public function createSecret() : string{
+		$rnd = openssl_random_pseudo_bytes(self::SECRET_LENGTH);
 		$secret = "";
-		$rnd = false;
-		if(function_exists('random_bytes')){
-			$rnd = random_bytes($secretLength);
-		}elseif(function_exists('mcrypt_create_iv')){
-			$rnd = mcrypt_create_iv($secretLength, MCRYPT_DEV_URANDOM);
-		}elseif(function_exists('openssl_random_pseudo_bytes')){
-			$rnd = openssl_random_pseudo_bytes($secretLength, $cryptoStrong);
-			if (!$cryptoStrong) {
-				$rnd = false;
-			}
-		}
-		if($rnd !== false){
-			for($i = 0; $i < $secretLength; ++$i){
-				$secret .= $validChars[ord($rnd[$i]) & 31];
-			}
-		}else{
-			throw new \Exception('No source of secure random');
+
+		for($i = 0; $i < self::SECRET_LENGTH; ++$i){
+			$secret .= self::BASE32_LOOKUP_TABLE[ord($rnd[$i]) & 31];
 		}
 
 		return $secret;
@@ -169,14 +152,12 @@ class Handler{
 
 		$secretkey = $this->_base32Decode($secret);
 
-		$time = chr(0).chr(0).chr(0).chr(0).pack('N*', $timeSlice);
+		$time = str_repeat(chr(0), 4).pack('N*', $timeSlice);
 		$hm = hash_hmac('SHA1', $time, $secretkey, true);
 		$offset = ord(substr($hm, -1)) & 0x0F;
 		$hashpart = substr($hm, $offset, 4);
 
-		$value = unpack('N', $hashpart);
-		$value = $value[1];
-		$value = $value & 0x7FFFFFFF;
+		$value = unpack('N', $hashpart)[1] & 0x7FFFFFFF;
 
 		$modulo = pow(10, self::CODE_LENGTH);
 
@@ -200,7 +181,7 @@ class Handler{
 
 		for($i = -$discrepancy; $i <= $discrepancy; ++$i){
 			$calculatedCode = $this->getCode($secret, $currentTimeSlice + $i);
-			if($this->timingSafeEquals($calculatedCode, $code)){
+			if(hash_equals($calculatedCode, $code)){
 				return true;
 			}
 		}
@@ -212,34 +193,38 @@ class Handler{
 	 * Please read EXTENDEDLICENSE.md before making
 	 * any changes to this function.
 	 *
-	 * @return string|bool
+	 * @return string
 	 */
-	private function _base32Decode(string $secret){
+	private function _base32Decode(string $secret) : string{
 		if(empty($secret)){
 			return "";
 		}
 
-		$base32chars = self::BASE32_LOOKUP_TABLE;
-		$base32charsFlipped = array_flip($base32chars);
+		$base32charsFlipped = array_flip(self::BASE32_LOOKUP_TABLE);
 
-		$paddingCharCount = substr_count($secret, $base32chars[32]);
+		$paddingCharCount = substr_count($secret, self::BASE32_LOOKUP_TABLE[32]);
 		$allowedValues = [6, 4, 3, 1, 0];
+
 		if(!in_array($paddingCharCount, $allowedValues)){
-			return false;
+			return "";
 		}
+
 		for($i = 0; $i < 4; ++$i){
 			if($paddingCharCount == $allowedValues[$i] &&
-				substr($secret, -($allowedValues[$i])) != str_repeat($base32chars[32], $allowedValues[$i])){
-				return false;
+				substr($secret, -($allowedValues[$i])) != str_repeat(self::BASE32_LOOKUP_TABLE[32], $allowedValues[$i])){
+				return "";
 			}
 		}
-		$secret = str_replace('=', "", $secret);
+
+		$secret = str_replace("=", "", $secret);
 		$secret = str_split($secret);
+
 		$binaryString = "";
+
 		for($i = 0; $i < count($secret); $i += 8){
 			$x = "";
-			if(!in_array($secret[$i], $base32chars)){
-				return false;
+			if(!in_array($secret[$i], self::BASE32_LOOKUP_TABLE)){
+				return "";
 			}
 			for($j = 0; $j < 8; ++$j){
 				$x .= str_pad(base_convert(@$base32charsFlipped[@$secret[$i + $j]], 10, 2), 5, '0', STR_PAD_LEFT);
@@ -251,31 +236,5 @@ class Handler{
 		}
 
 		return $binaryString;
-	}
-
-	/**
-	 * Please read EXTENDEDLICENSE.md before making
-	 * any changes to this function.
-	 *
-	 * @return bool
-	 */
-	private function timingSafeEquals(string $safeString, string $userString) : bool{
-		if(function_exists('hash_equals')){
-			return hash_equals($safeString, $userString);
-		}
-		$safeLen = strlen($safeString);
-		$userLen = strlen($userString);
-
-		if($userLen != $safeLen){
-			return false;
-		}
-
-		$result = 0;
-
-		for($i = 0; $i < $userLen; ++$i){
-			$result |= (ord($safeString[$i]) ^ ord($userString[$i]));
-		}
-
-		return $result === 0;
 	}
 }

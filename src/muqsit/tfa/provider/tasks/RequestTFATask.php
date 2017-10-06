@@ -56,7 +56,7 @@ class RequestTFATask extends AsyncTask {
 	const BARCODE_MARGIN = 3;
 
 	/** @var int */
-	private static $iuuid = PHP_INT_MAX;
+	private static $iuuid;
 
 	/** @var TFAPlayer */
 	private $player;
@@ -76,13 +76,14 @@ class RequestTFATask extends AsyncTask {
 	/** @var string */
 	private static $title;
 
-	public static function setTitle(string $title){
+	public static function init(string $title){
 		self::$title = $title;
+		self::$iuuid = mt_rand();
 	}
 
 	public function __construct(TFAPlayer $player, Handler $handler){
 		$this->player = $player;
-		$this->uuid = --self::$iuuid;
+		$this->uuid = ++self::$iuuid;
 		$this->tfhandler = $handler;
 		$this->fontpath = Handler::getFont();
 	}
@@ -173,7 +174,7 @@ class RequestTFATask extends AsyncTask {
 
 				$player->dataPacket($pk);
 				$player->sendMessage(implode("\n", [
-					TextFormat::GREEN."We have sent you a map with your secret info.".TextFormat::RESET,
+					TextFormat::GREEN."We have sent you a map with your secret info.",
 					TextFormat::GREEN."Enter (or scan) it into your authenticator",
 					TextFormat::GREEN."application and then run ".TextFormat::GRAY."/2fa <code>"
 				]));

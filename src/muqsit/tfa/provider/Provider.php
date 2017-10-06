@@ -56,7 +56,7 @@ class Provider{
 			$data->setMysqlData([$mysql["Host"], $mysql["Username"], $mysql["Password"], $mysql["Database"], $mysql["Port"]]);
 		}
 
-		RequestTFATask::setTitle($settings["2FATitle"] ?? "PMMP");
+		RequestTFATask::init($settings["2FATitle"] ?? "PMMP");
 	}
 
 	public function getHandler() : Handler{

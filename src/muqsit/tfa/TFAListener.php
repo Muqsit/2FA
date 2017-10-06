@@ -96,7 +96,7 @@ class TFAListener implements Listener{
 				$player->sendMessage(TextFormat::GREEN."2FA code has been successfully verified.");
 				return;
 			}
-			$player->sendMessage("\n".TextFormat::RED."Please enter the code in your Google Authenticator app. You can alternatively use your recovery codes if you do not have access to your 2FA device.\n");
+			$player->sendMessage("\n".TextFormat::RED."Please enter the code in your Google Authenticator app. You can alternatively use your recovery codes if you do not have access to your 2FA device.\n ");
 		}
 	}
 

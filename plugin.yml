@@ -5,6 +5,7 @@ version: 0.0.1
 author: Muqsit
 description: Two-factor authentication for your PocketMine server.
 website: https://github.com/Muqsit
+extension: gd
 commands:
   2fa:
     description: "2fa toggle command"

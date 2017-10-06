@@ -22,9 +22,6 @@ namespace muqsit\tfa\player;
 
 class TFAPlayerData{
 
-	/** @var bool */
-	private $exists;
-
 	/** @var string|null */
 	private $secret;
 
@@ -58,7 +55,7 @@ class TFAPlayerData{
 	public function setRecoveryCodes(array $codes){
 		foreach($codes as $code){
 			if(ceil(log10($code)) !== 8.0){
-				throw new \InvalidArgumentException("Secret codes must be 8-digit in length, got ".ceil(log10($code))." digit code.");
+				throw new \InvalidArgumentException("Recovery codes must be 8-digit in length, got ".ceil(log10($code))." digit code.");
 			}
 		}
 		$this->recovery = $codes;
